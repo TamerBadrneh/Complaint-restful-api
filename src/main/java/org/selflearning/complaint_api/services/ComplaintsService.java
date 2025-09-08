@@ -2,6 +2,8 @@ package org.selflearning.complaint_api.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.selflearning.complaint_api.constants.SystemValues;
 import org.selflearning.complaint_api.models.Complaint;
@@ -51,34 +53,27 @@ public class ComplaintsService implements IComplaintService {
 
     // Business Logic
     private Integer getComplaintIndex(final String complaintId) {
-        final List<Complaint> ALL_COMPLAINTS = getAllComplaints("all", "all");
-        for (int index = 0; index < ALL_COMPLAINTS.size(); index++)
-            if (ALL_COMPLAINTS.get(index).getId().equals(complaintId))
-                return index;
-        return SystemValues.NOT_FOUND;
+        final List<Complaint> ALL_COMPLAINTS = getAllComplaints(SystemValues.ALL, SystemValues.ALL);
+        return IntStream.range(0, ALL_COMPLAINTS.size())
+                .filter(index -> ALL_COMPLAINTS.get(index).getId().equals(complaintId))
+                .findFirst()
+                .orElse(SystemValues.NOT_FOUND);
     }
 
     private static List<Complaint> filterComplaintsByStatus(final List<Complaint> complaints, final String status) {
-        if (status.equalsIgnoreCase("all"))
+        if (status.equalsIgnoreCase(SystemValues.ALL))
             return complaints;
-
-        List<Complaint> result = new ArrayList<>();
-        for (final Complaint complaint : complaints)
-            if (complaint.getStatus().toString().equalsIgnoreCase(status))
-                result.add(complaint);
-
-        return result;
+        return complaints.stream()
+                .filter((Complaint complaint) -> complaint.getStatus().toString().equalsIgnoreCase(status))
+                .toList();
     }
 
     private static List<Complaint> filterComplaintsByCategory(final List<Complaint> complaints, final String category) {
         if (category.equalsIgnoreCase("all"))
             return complaints;
 
-        List<Complaint> result = new ArrayList<>();
-        for (final Complaint complaint : complaints)
-            if (complaint.getCategory().toString().equalsIgnoreCase(category))
-                result.add(complaint);
-
-        return result;
+        return complaints.stream()
+                .filter((Complaint complaint) -> complaint.getCategory().toString().equalsIgnoreCase(category))
+                .toList();
     }
 }
