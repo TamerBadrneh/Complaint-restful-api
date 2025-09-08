@@ -1,10 +1,8 @@
 package org.selflearning.complaint_api.services;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import org.selflearning.complaint_api.constants.SystemValues;
 import org.selflearning.complaint_api.models.Complaint;
 import org.selflearning.complaint_api.repositories.ComplaintsRepository;
@@ -43,6 +41,7 @@ public class ComplaintsService implements IComplaintService {
 
     @Override
     public void updateComplaint(final String id, final Complaint newComplaint) {
+        newComplaint.setUpdatedAt(LocalDateTime.now());
         repository.updateComplaint(getComplaintIndex(id), newComplaint);
     }
 

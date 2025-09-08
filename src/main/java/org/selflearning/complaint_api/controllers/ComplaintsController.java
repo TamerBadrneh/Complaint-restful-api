@@ -2,6 +2,8 @@ package org.selflearning.complaint_api.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 import java.util.List;
 
 import org.selflearning.complaint_api.constants.Endpoints;
@@ -39,14 +41,14 @@ public class ComplaintsController {
     }
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> createComplaint(@RequestBody Complaint object) {
+    public ResponseEntity<HttpStatus> createComplaint(@Valid @RequestBody final Complaint object) {
         service.createComplaint(object);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<HttpStatus> updateComplaint(@PathVariable final String id,
-            @RequestBody final Complaint newComplaint) {
+            @Valid @RequestBody final Complaint newComplaint) {
         service.updateComplaint(id, newComplaint);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
