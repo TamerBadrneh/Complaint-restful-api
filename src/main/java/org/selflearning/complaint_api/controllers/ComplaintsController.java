@@ -10,9 +10,14 @@ import org.selflearning.complaint_api.services.IComplaintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping(Endpoints.COMPLAINTS_REQUEST_MAPPING)
@@ -31,6 +36,25 @@ public class ComplaintsController {
             @RequestParam(required = false, defaultValue = "all") final String status,
             @RequestParam(required = false, defaultValue = "all") final String category) {
         return new ResponseEntity<>(service.getAllComplaints(status, category), HttpStatus.OK);
+    }
+
+    @PostMapping()
+    public ResponseEntity<HttpStatus> createComplaint(@RequestBody Complaint object) {
+        service.createComplaint(object);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<HttpStatus> updateComplaint(@PathVariable final String id,
+            @RequestBody final Complaint newComplaint) {
+        service.updateComplaint(id, newComplaint);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<HttpStatus> deleteComplaint(@PathVariable final String id) {
+        service.deleteComplaint(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

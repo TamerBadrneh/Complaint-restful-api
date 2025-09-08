@@ -10,4 +10,10 @@ public interface IComplaintService {
 
     Complaint getComplaint(String id);
 
+    void createComplaint(Complaint complaint);
+
+    void updateComplaint(String id, Complaint newComplaint);
+
+    void deleteComplaint(String id);
+
 }

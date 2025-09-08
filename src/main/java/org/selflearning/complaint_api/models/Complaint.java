@@ -18,17 +18,9 @@ public class Complaint {
 
     public Complaint() {
         this.setId(UUID.randomUUID().toString());
-    }
-
-    public Complaint(String id, String title, String description, ComplaintCategory category,
-            ComplaintResolveStatus status, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.category = category;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.setCategory(ComplaintCategory.OTHER);
+        this.setCreatedAt(LocalDateTime.now());
+        this.setStatus(ComplaintResolveStatus.OPENED);
     }
 
     public String getId() {

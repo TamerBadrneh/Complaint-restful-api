@@ -15,6 +15,7 @@ public class ComplaintsService implements IComplaintService {
     @Autowired
     private ComplaintsRepository repository;
 
+    // Service Methods - CRUD
     @Override
     public List<Complaint> getAllComplaints(String status, String category) {
         List<Complaint> allComplaints = repository.getAllComplaints();
@@ -30,9 +31,25 @@ public class ComplaintsService implements IComplaintService {
         if (index == null || index.equals(SystemValues.NOT_FOUND))
             return null;
 
-        return repository.geComplaint(index);
+        return repository.getComplaint(index);
     }
 
+    @Override
+    public void createComplaint(final Complaint complaint) {
+        repository.saveComplaint(complaint);
+    }
+
+    @Override
+    public void updateComplaint(final String id, final Complaint newComplaint) {
+        repository.updateComplaint(getComplaintIndex(id), newComplaint);
+    }
+
+    @Override
+    public void deleteComplaint(final String id) {
+        repository.deleteComplaint(getComplaintIndex(id));
+    }
+
+    // Business Logic
     private Integer getComplaintIndex(final String complaintId) {
         final List<Complaint> ALL_COMPLAINTS = getAllComplaints("all", "all");
         for (int index = 0; index < ALL_COMPLAINTS.size(); index++)
