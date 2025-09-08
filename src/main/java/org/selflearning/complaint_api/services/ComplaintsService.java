@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
 import org.selflearning.complaint_api.constants.SystemValues;
+import org.selflearning.complaint_api.exceptions.ComplaintNotFoundException;
 import org.selflearning.complaint_api.models.Complaint;
 import org.selflearning.complaint_api.repositories.ComplaintsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,7 @@ public class ComplaintsService implements IComplaintService {
 
     @Override
     public Complaint getComplaint(String id) {
-        Integer index = getComplaintIndex(id);
-
-        if (index == null || index.equals(SystemValues.NOT_FOUND))
-            return null;
-
-        return repository.getComplaint(index);
+        return repository.getComplaint(getComplaintIndex(id));
     }
 
     @Override
@@ -56,7 +52,8 @@ public class ComplaintsService implements IComplaintService {
         return IntStream.range(0, ALL_COMPLAINTS.size())
                 .filter(index -> ALL_COMPLAINTS.get(index).getId().equals(complaintId))
                 .findFirst()
-                .orElse(SystemValues.NOT_FOUND);
+                .orElseThrow(() -> new ComplaintNotFoundException(
+                        new StringBuilder("Id: ").append(complaintId).append(" not found.").toString()));
     }
 
     private static List<Complaint> filterComplaintsByStatus(final List<Complaint> complaints, final String status) {
