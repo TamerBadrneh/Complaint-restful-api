@@ -2,6 +2,7 @@ package org.selflearning.complaint_api.models;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -21,6 +22,7 @@ public class Complaint {
     private Long id;
 
     @Column(name = "TITLE", nullable = false)
+    @NotBlank(message = "Title can't be blank")
     @Length(min = 3, max = 50, message = "Complaint Title Should Be Between [3 - 50] Characters.")
     private String title;
 
@@ -29,6 +31,7 @@ public class Complaint {
     private String description;
 
     @Column(name = "CATEGORY", nullable = false)
+    @NotBlank(message = "Category can't be blank")
     private ComplaintCategory category;
 
     @Column(name = "STATUS", nullable = false)
